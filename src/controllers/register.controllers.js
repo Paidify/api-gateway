@@ -1,4 +1,4 @@
-import { readOne, readMany, updateOne, createOne } from '../helpers/crud.js';
+import { readOne, createOne } from '../helpers/crud.js';
 import pool from '../services/db.js';
 
 export default async function (req, res) {
@@ -16,7 +16,15 @@ export default async function (req, res) {
     try {
         await createOne('instance', { service_id: serviceId, url }, pool);
     } catch (err) {
-        if (err.code === 'ER_DUP_ENTRY') return res.status(409).json({ message: 'Instance already exists' });
+        if (err.code === 'ER_DUP_ENTRY') {
+            const serviceIdInstReg = (await readOne(
+                'instance', { 'instance': ['service_id'] }, [], { url }, pool
+            )).service_id;
+            return res.status(409).json({
+                message: serviceIdInstReg === serviceId ? 
+                'OK' : 'Url already registered for another service'
+            });
+        }
         return res.status(500).json({ message: 'Internal gateway error' });
     }
 
