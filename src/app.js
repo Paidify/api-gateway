@@ -1,7 +1,7 @@
 import express from 'express';
 import morgan from 'morgan';
 import helmet from 'helmet';
-import v1 from './routes/index.routes.js';
+import routes from './routes/index.routes.js';
 import pkg from '../package.json' assert { type: "json" };
 import pool from './services/db.js';
 
@@ -34,7 +34,7 @@ app.get('/ping', async (_, res) => {
     }
     res.status(200).json({ message: result });
 });
-app.use('/v1', v1);
+app.use(routes);
 // app.use((_, res) => res.status(404).json({ message: 'Not Found' }));
 
 export default app;
