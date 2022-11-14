@@ -84,6 +84,9 @@ export default async function (req, res) {
     }
     try {
         await updateOne('service', { 'instance_id': newInst.id }, { 'id': service.id }, pool);
+        if(newInst.fail_count) { // reset fail_count if it was not 0
+            await updateOne('instance', { 'fail_count': 0 }, { 'id': newInst.id }, pool);
+        }
     } catch(err) {}
     res.status(response.status).json(response.data);
 }

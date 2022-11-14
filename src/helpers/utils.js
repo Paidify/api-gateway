@@ -3,7 +3,7 @@ export default function getResourceService (resource) {
         'queries': ['users', 'guests', 'pay-concepts', 'pay-methods', 'payments', 'invoices'],
         'auth': ['login'],
         'payment': ['pay'],
-        'balance': ['check']
+        'balance': ['checkBalance']
     };
     for(const service in services) {
         if(services[service].includes(resource)) return service;
