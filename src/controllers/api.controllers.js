@@ -43,6 +43,9 @@ export default async function (req, res) {
         (instances.findIndex(inst => inst.id === service.instance_id) + 1) % instances.length : 0;
     const newInst = instances[newInstIndex];
     
+    delete req.headers.host;
+    delete req.headers['content-length'];
+
     console.log({
         method: req.method,
         url: `${newInst.url}${req.url}`,
