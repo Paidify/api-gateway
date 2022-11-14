@@ -47,7 +47,8 @@ export default async function (req, res) {
         method: req.method,
         url: `${newInst.url}${req.url}`,
         headers: req.headers,
-        data: req.body
+        data: req.body,
+        timeout: 10000
     });
     let response;
     try {
@@ -56,6 +57,7 @@ export default async function (req, res) {
             url: `${newInst.url}${req.url}`,
             headers: req.headers,
             data: req.body,
+            timeout: 10000
         });
     } catch(err) {
         if(!err.response) {
