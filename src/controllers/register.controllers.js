@@ -25,6 +25,7 @@ export default async function (req, res) {
                 'OK' : 'Url already registered for another service'
             });
         }
+        console.log(err);
         return res.status(500).json({ message: 'Internal gateway error' });
     }
 

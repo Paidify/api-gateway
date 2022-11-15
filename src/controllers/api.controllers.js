@@ -1,8 +1,8 @@
 import { readOne, readMany, updateOne, deleteOne } from '../helpers/crud.js';
 import pool from '../services/db.js';
-import axios from 'axios';
 import { MAX_FAIL_COUNT } from '../config/constants.js';
 import getResourceService from '../helpers/utils.js';
+import fetch from '../helpers/fetch.js';
 
 export default async function (req, res) {
     const resource = req.url.split('/')[1];
@@ -46,41 +46,29 @@ export default async function (req, res) {
     delete req.headers.host;
     delete req.headers['content-length'];
 
-    console.log({
-        method: req.method,
-        url: `${newInst.url}${req.url}`,
-        headers: req.headers,
-        data: req.body,
-        timeout: 10000
-    });
     let response;
     try {
-        response = await axios({
+        response = await fetch(newInst.url + req.url, {
             method: req.method,
-            url: `${newInst.url}${req.url}`,
             headers: req.headers,
-            data: req.body,
+            body: req.body,
             timeout: 10000
-        });
+        })
     } catch(err) {
-        if(!err.response) {
-            console.log(err.message, err.cause);
-            res.status(500).json({ message: 'Internal gateway error' });
+        console.log(err);
+        res.status(500).json({ message: 'Internal gateway error' });
 
-            const fail_count = newInst.fail_count + 1;
-            if(fail_count >= MAX_FAIL_COUNT) {
-                try {
-                    await deleteOne('instance', { 'id': newInst.id }, pool);
-                } catch(err) {}
-            } else {
-                try {
-                    await updateOne('instance', { 'fail_count': fail_count }, { 'id': newInst.id }, pool);
-                } catch(err) {}
-            }
-            return;
+        const fail_count = newInst.fail_count + 1;
+        if(fail_count >= MAX_FAIL_COUNT) {
+            try {
+                await deleteOne('instance', { 'id': newInst.id }, pool);
+            } catch(err) {}
         } else {
-            response = err.response;
+            try {
+                await updateOne('instance', { 'fail_count': fail_count }, { 'id': newInst.id }, pool);
+            } catch(err) {}
         }
+        return;
     }
     try {
         await updateOne('service', { 'instance_id': newInst.id }, { 'id': service.id }, pool);
