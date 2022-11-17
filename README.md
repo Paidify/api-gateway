@@ -73,7 +73,7 @@ All endpoints begin with the API Gateway version (currently, /v1). Whenever auth
 ### Balance Service
 |Method + Enpoint|Resource|JSON Body Fields|Auth|
 |--|--|--|--|
-|GET /check-balance|Check cards balance|user_id, card_numbers (array)||
+|POST /check-balance|Check cards balance|user_id, card_numbers (array)||
 
 ## Acknowledgements
 
