@@ -22,7 +22,15 @@ On the project root directory, run
 This will start your server on port 3000
 
 ## Usage
-All endpoints begin with the API Gateway version (currently, /v1). Whenever authentication is required, a token should be through the Authorization header with the Bearer schema.
+### General Endpoints
+|Method + Enpoint|Resource|JSON Body Fields|Auth|
+|--|--|--|--|
+|GET /monitor|Show services and instances registered|||
+|POST /register|Register instance|service, url (e.g. https://paidify-queries.azurewebsites.net)||
+|DELETE /unregister/:id|Unregister instance by id|||
+|PUT /enable/:id|Enable or disable service by id|enabled (0, 1)||
+
+All endpoints from services (from now on) on begin with the API Gateway version (currently, /v1). Whenever authentication is required, a token should be through the Authorization header with the Bearer schema.
 
 ### Auth Service
 |Method + Enpoint|Resource|JSON Body Fields|Auth|
@@ -34,10 +42,12 @@ All endpoints begin with the API Gateway version (currently, /v1). Whenever auth
 |--|--|--|--|
 |GET /pay-concepts|Get all payment concepts available|||
 |GET /pay-concepts/:id|Get payment concept by id [1-30]|||
+|GET /pay-concept-persons|Get all payment concepts available for users||admin|
+|GET /pay-concept-persons/:id|Get payment concept by id available for user||admin|
 |GET /pay-methods|Get all payment methods registered by users||admin|
 |GET /pay-methods/:id|Get payment method by id||admin|
 |GET /payments|Get all payments (pending or settled)||admin|
-|GET /payment/:id|Get payment by id||admin|
+|GET /payments/:id|Get payment by id||admin|
 |GET /pay-reqs|Get pending payments||admin|
 |GET /pay-reqs/:id|Get pending payment by id||admin|
 |GET /pay-settled|Get payments settled (successful or rejected)||admin|
@@ -52,8 +62,8 @@ All endpoints begin with the API Gateway version (currently, /v1). Whenever auth
 |GET /users/:id/pay-methods/:id|Get payment method by id from user||user, admin|
 |POST /users/:id/pay-methods|Create payment method|card_number, card_type (credit, debit), owner|user|
 |DELETE /users/:id/pay-methods/:id|Delete payment method by id||user|
-|GET /users/:id/pay-concepts|Get payment concepts available for user||user, admin|
-|GET /users/:id/pay-concepts/:id|Get payment concept by id available for user||user, admin|
+|GET /users/:id/pay-concept-persons|Get payment concepts available for user||user, admin|
+|GET /users/:id/pay-concept-persons/:id|Get payment concept by id available for user||user, admin|
 |GET /users/:id/payments|Get payments from user (pending or settled)||user, admin|
 |GET /users/:id/payments/:id|Get payment by id from user||user, admin|
 |GET /users/:id/invoices|Get invoices (for successful payments) from user||user, admin|
