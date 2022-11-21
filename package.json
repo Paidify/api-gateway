@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Paidify/api-gateway#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "helmet": "^6.0.0",

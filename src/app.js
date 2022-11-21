@@ -1,6 +1,7 @@
 import express from 'express';
 import morgan from 'morgan';
 import helmet from 'helmet';
+import cors from 'cors';
 import routes from './routes/index.routes.js';
 import pkg from '../package.json' assert { type: "json" };
 import pool from './services/db.js';
@@ -12,12 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 app.use(helmet());
-app.use((_, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, x-auth-token');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    next();
-});
+app.use(cors());
 
 app.get('/', (_, res) => res.status(200).json({
     message: 'Welcome to the Paidify API Gateway',
